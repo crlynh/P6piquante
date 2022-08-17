@@ -1,9 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
-const saucesRoutes = require('./routes/sauces');
-const userRoutes = require('./routes/user');
 const path = require('path');
+
+const saucesRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
+
 
 mongoose.connect('mongodb+srv://crlynh:AlKCXCLRmdpJe1mj@cluster0.ekezcft.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
