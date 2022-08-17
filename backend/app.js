@@ -13,6 +13,7 @@ mongoose.connect('mongodb+srv://crlynh:AlKCXCLRmdpJe1mj@cluster0.ekezcft.mongodb
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+app.use(express.json());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,8 +21,6 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
-
-app.use(express.json());
 
 app.use('/api/sauces', saucesRoutes);
 app.use('/api/auth', userRoutes);
