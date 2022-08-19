@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauce');
 const User = require("../models/user");
+const { ObjectId } = require('mongodb');
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
@@ -19,7 +20,7 @@ exports.createSauce = (req, res, next) => {
 
 exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({
-    _id: req.params.id
+    _id: ObjectId(req.params.id)
   }).then(
     (sauce) => {
       res.status(200).json(sauce);
@@ -86,4 +87,24 @@ exports.getAllSauces = (req, res, next) => {
       });
     }
   );
+};
+
+exports.sauceLikes = (req, res, next) => {
+
+  // Si like = 1, l'utilisateur aime (= likes)
+  // Si like = 0, l'utilisateur annule son like ou son dislike
+  // Si like = -1, l'utilisateur n'aime pas (= dislikes)
+
+  const sauceObject = JSON.parse(req.body.sauce);
+  delete sauceObject._id;
+  delete sauceObject._userId;
+  const sauce = new Sauce({
+      ...sauceObject,
+      userId: req.auth.userId,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  });
+
+  sauce.save()
+  .then(() => { res.status(201).json({message: 'Sauce enregistrée !'})})
+  .catch(error => { res.status(400).json( { error })})
 };
